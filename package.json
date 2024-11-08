@@ -30,7 +30,9 @@
     "semver": "^7.3.5",
     "tailwindcss": "^3.0.2",
     "typescript": "^4.9.5",
-    "web-vitals": "^2.1.4"
+    "web-vitals": "^2.1.4",
+    "p-retry": "^4.6.2",
+    "axios": "0.21.4"
   },
   "scripts": {
     "start": "node scripts/start.js",

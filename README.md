@@ -1,46 +1,27 @@
-# Getting Started with Create React App
+## Fiber 原理
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+- Fiber 本质上是 JS 对象，存有包括 dom 信息，return 父节点，child 子节点，sibling 兄弟节点，以及 effect 更新相关信息，等等。相当于升级版的虚拟节点。
 
-## Available Scripts
+- Fiber 采用双缓存技术，当前页面渲染的是 current 对应的 Fiber 树，而更新的内容则在内存中生成一棵 workInProgress Fiber 树。经历 Reconciler（协调器）处理后，current 再指向新的 Fiber 树
 
-In the project directory, you can run:
+- 整个应用只有一个 FiberRootNode 节点，其 current 指向当前 Fiber 树，而 current 或者 current.alternate(即 workInProgress 树) 各有一个根节点，为 RootFiber
 
-### `npm start`
+## 总体三个阶段
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+- Scheduler（调度器）—— 调度任务的优先级，高优任务优先进入 Reconciler
+- Reconciler（协调器）—— 负责找出变化的组件，称为 _render_ 阶段
+- Renderer（渲染器）—— 负责将变化的组件渲染到页面上，称为 _commit_ 阶段
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+## Reconciler 的 _render_ 阶段
 
-### `npm test`
+### `递` 过程 —— beginWork
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+### `归` 过程 —— completeWork
 
-### `npm run build`
+## Renderer 的 _commit_ 阶段
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+- commit 阶段的主要工作（即 Renderer 的工作流程）分为三部分：
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
+  1. before mutation 阶段（执行 DOM 操作前）
+  2. mutation 阶段（执行 DOM 操作）
+  3. layout 阶段（执行 DOM 操作后）
